@@ -1,0 +1,3 @@
+posso criar um botao para aumentar a velociade de reprodução ou diminuir.
+Equalizar o som de forma optar por reproduzir low medium ou high frequencies.
+E tentar por a musica a reproduzir octavas a cima ou abaixo, nivelar o pitch.

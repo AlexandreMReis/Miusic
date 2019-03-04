@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <ion-header>
+    <ion-navbar color="light">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title class="title">Favorites</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only class="search" (click)="pushSearchPage()">
+          <ion-icon name="search"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-header>
+
+  <ion-content padding>
+    <ion-segment [(ngModel)]="library" color="light">
+      <ion-segment-button value="artists" (click)="loadMusicProvider.sortArtistsOnFav()">
+        <ion-icon name="people"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="albums" (click)="loadMusicProvider.sortAlbumsOnFav()">
+        <ion-icon name="albums"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="musics" (click)="loadMusicProvider.sortMusicsOnFav()">
+        <ion-icon name="musical-notes"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-list [ngSwitch]="library" >
+      <ion-list *ngSwitchCase="'artists'" ng-switch-default>
+        <button ion-item *ngFor="let artist of loadMusicProvider.favorites.artists" (click)="chooseArtist(artist)">
+            {{artist.name}}
+        </button>
+      </ion-list>
+
+      <ion-list *ngSwitchCase="'albums'">
+        <button ion-item *ngFor="let album of loadMusicProvider.favorites.albums; let i = index" (click)="chooseAlbum(album)">
+            <ion-thumbnail item-start>
+              <img src='{{album.imageSrc}}'>
+            </ion-thumbnail>
+            <h2>{{album.title}}</h2>
+            <p >{{album.artist.name}}</p>
+        </button>
+
+      </ion-list>
+      
+      <ion-list *ngSwitchCase="'musics'">
+        <button ion-item *ngFor="let music of loadMusicProvider.favorites.musics; let i = index" (click)="musicClicked(music, i)">
+          <ion-label [color]="playMusicProvider.played && music===playMusicProvider.musicPlaying.music ? 'secondary' : 'black'">{{ music.title }}</ion-label>
+          <ion-icon *ngIf="playMusicProvider.played && music===playMusicProvider.musicPlaying.music" clear item-end color="secondary" [name]="playMusicProvider.isPlay ? 'play' : 'pause'"></ion-icon>
+        </button>
+      </ion-list>
+    </ion-list>
+  </ion-content>
+
+  <ion-footer>
+    <ion-range *ngIf="playMusicProvider.played" max={{playMusicProvider.musicDuration}} [(ngModel)]="playMusicProvider.currentPosition">
+        <ion-label class="musicStatusTemp" range-left >{{playMusicProvider.currentPosStr}}</ion-label>
+        <ion-label class= "musicStatusTemp" range-right >{{playMusicProvider.durationStr}}</ion-label>
+    </ion-range>
+  <ion-toolbar class="footer-toolbar">
+    
+    <ion-item class="item-playing" *ngIf="playMusicProvider.played">
+      <ion-avatar item-start class="avatar-album" (click)="chooseAlbum(playMusicProvider.musicPlaying.music.album)">
+        <img src='{{playMusicProvider.musicPlaying.music.album.imageSrc}}' >
+      </ion-avatar>
+      <h2 ion-text class="music" >{{playMusicProvider.musicPlaying.music.title}}</h2>
+      <p ion-text color="secondary" class="artist" (click)="chooseArtist(playMusicProvider.musicPlaying.music.album.artist)">{{playMusicProvider.musicPlaying.music.artistName}}</p>
+
+      <div class="item-playing-buttons">
+        <button ion-button small round outline class="skipBackButton" (click)="playMusicProvider.skipBack()">
+          <ion-icon name="skip-backward"></ion-icon> 
+        </button>
+            
+        <button *ngIf="!playMusicProvider.isPlay" ion-button big round outline class="playButton" (click)="playMusicProvider.playMusic()">
+          <ion-icon name="play"></ion-icon> 
+        </button>
+    
+        <button *ngIf="playMusicProvider.isPlay" ion-button big round class="pauseButton" (click)="playMusicProvider.pauseMusic()">
+          <ion-icon name="pause"></ion-icon>
+        </button>
+        
+        <button ion-button small round outline class="skipForwardButton" (click)="playMusicProvider.skipForward()">
+          <ion-icon name="skip-forward"></ion-icon> 
+        </button>
+
+        <button *ngIf="playMusicProvider.methodActive===0" ion-button small round outline class="skipMethodNormal" (click)="playMusicProvider.changeSkipMethod()">
+          <ion-icon name="sync"></ion-icon>
+        </button>
+
+        <button *ngIf="playMusicProvider.methodActive===1" ion-button small round outline class="skipMethodShuffle" (click)="playMusicProvider.changeSkipMethod()">
+          <ion-icon name="shuffle"></ion-icon>
+        </button>
+
+        <button *ngIf="playMusicProvider.methodActive===2" ion-button small round outline class="skipMethodLoop" (click)="playMusicProvider.changeSkipMethod()">
+          <ion-icon name="sync">1</ion-icon>
+        </button>
+
+      </div>
+    </ion-item>
+
+    <ion-item class="item-playing" *ngIf="!playMusicProvider.played">
+      <ion-avatar item-start class="avatar-album" (click)="chooseAlbum(playMusicProvider.musicPlaying.music.album)">
+        <img src="assets/imgs/logo.png">
+      </ion-avatar>
+      <h2 ion-text class="music" >--</h2>
+      <p ion-text color="secondary" class="artist">--</p>
+
+      <div class="item-playing-buttons">
+        <button ion-button small round outline class="skipBackButton">
+          <ion-icon name="skip-backward"></ion-icon> 
+        </button>
+            
+        <button ion-button big round outline class="playButton">
+          <ion-icon name="play"></ion-icon> 
+        </button>
+        
+        <button ion-button small round outline class="skipForwardButton">
+          <ion-icon name="skip-forward"></ion-icon> 
+        </button>
+
+      </div>
+    </ion-item>
+
+  </ion-toolbar>
+</ion-footer>
+  
+</html>
