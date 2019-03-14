@@ -1,5 +1,6 @@
 ﻿na lista de musica pôr tempo de duracao de cada m----some.more.devmodificações-usica.
 
+
 Colocar se encontrar plugin, botoes de reprodução em lockscreen.
 
 No IOs ver como por musica a reproduzir em background: https://heshyo.github.io/2016/09/12/Background-audio-and-lockscreen-player-on-iOS-Ionic2-Cordova.html
